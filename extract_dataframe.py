@@ -46,7 +46,8 @@ class TweetDfExtractor:
         for tweet in self.tweets_list:
             text.append(tweet["full_text"])
         return text
-           
+    
+    #still not fixed
     def find_sentiments(self, text)->list:
         
         return polarity, self.subjectivity
@@ -64,14 +65,24 @@ class TweetDfExtractor:
         return source
 
     def find_screen_name(self)->list:
-        screen_name = 
+        screen_name = []
+        for tweet in self.tweet_list:
+            screen_name.append(tweet['user']['screen_name'])
+        return screen_name
 
     def find_followers_count(self)->list:
-        followers_count = 
+        followers_count = []
+        for tweet in self.tweet_list:
+            followers_count.append(tweet['user']['followers_count'])
+        return followers_count
 
     def find_friends_count(self)->list:
-        friends_count = 
+        friends_count = []
+        for tweet in self.tweet_list:
+            friends_count.append(tweet['user']['friends_count'])
+        return friends_count        
 
+    #example
     def is_sensitive(self)->list:
         try:
             is_sensitive = [x['possibly_sensitive'] for x in self.tweets_list]
@@ -81,16 +92,20 @@ class TweetDfExtractor:
         return is_sensitive
 
     def find_favourite_count(self)->list:
-        
+        favourite_count = [x['user']['favourites_count'] for x in self.tweets_list]
+        return favourite_count
     
     def find_retweet_count(self)->list:
-        retweet_count = 
+        retweet_count = [x['retweet_count'] for x in self.tweets_list]
+        return retweet_count
 
     def find_hashtags(self)->list:
-        hashtags =
+        hashtags = [x["entities"]['hashtags'] for x in self.tweets_list]
+        return hashtags
 
     def find_mentions(self)->list:
-        mentions = 
+        mentions = [x['entities']['user_mentions'] for x in self.tweets_list]
+        return mentions
 
 
     def find_location(self)->list:
