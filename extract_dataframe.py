@@ -120,7 +120,7 @@ class TweetDfExtractor:
                 
         return locations
 
-    def get_tweet_df(self, save=False)->pd.DataFrame:
+    def get_tweet_df(self, save=False, file_name = 'processed_tweet_data.csv')->pd.DataFrame:
         """required column to be generated you should be creative and add more features"""
         
         columns = ['statuses_coun','created_at', 'source', 'original_text','polarity','subjectivity', 'lang', 'favorite_count', 'retweet_count', 
@@ -145,7 +145,7 @@ class TweetDfExtractor:
         df = pd.DataFrame(data=data, columns=columns)
 
         if save:
-            df.to_csv('processed_tweet_data.csv', index=False)
+            df.to_csv(file_name, index=False)
             print('File Successfully Saved.!!!')
         
         return df
