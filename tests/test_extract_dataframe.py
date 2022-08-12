@@ -11,8 +11,10 @@ from extract_dataframe import TweetDfExtractor
 # we will need about 5 tweet samples. 
 # Create a sample not more than 10 tweets and place it in a json file.
 # Provide the path to the samples tweets file you created below
-sampletweetsjsonfile = ""   #put here the path to where you placed the file e.g. ./sampletweets.json. 
+sampletweetsjsonfile = os.path.dirname(__file__) + "/../sampletweets.json"   #put here the path to where you placed the file e.g. ./sampletweets.json. 
 _, tweet_list = read_json(sampletweetsjsonfile)
+
+tweet_list = tweet_list[0]
 
 columns = [
     "created_at",
@@ -39,7 +41,7 @@ columns = [
 
 class TestTweetDfExtractor(unittest.TestCase):
     """
-		A class for unit-testing function in the fix_clean_tweets_dataframe.py file
+		A class for unit-testing function in the extract_dataframe.py file
 
 		Args:
         -----
@@ -53,11 +55,15 @@ class TestTweetDfExtractor(unittest.TestCase):
 
     def test_find_statuses_count(self):
         self.assertEqual(
-            self.df.find_statuses_count(), <provide a list of the first five status counts>
+            self.df.find_statuses_count(), [8097, 5831, 1627, 1627, 18958] #<provide a list of the first five status counts>
         )
 
     def test_find_full_text(self):
-        text = <provide a list of the first five full texts>
+        text = ['RT @i_ameztoy: Extra random image (I):\n\nLets focus in one very specific zone of the western coast -&gt; Longjing District, Taichung #City, #Ta…',
+ "RT @IndoPac_Info: #China's media explains the military reasons for each area of the drills in the #Taiwan Strait\n\nRead the labels in the pi…",
+ "China even cut off communication, they don't anwer phonecalls from the US. But here clown @ZelenskyyUa enters the stage to ask #XiJinping to change Putin's mind.",
+ "Putin to #XiJinping : I told you my friend, Taiwan will be a vassal state, including nukes, much like the Ukrainian model. I warned you... But it took Pelosi to open China's eyes.",
+ 'RT @ChinaUncensored: I’m sorry, I thought Taiwan was an independent country because it had its own government, currency, military, travel d…'] #<provide a list of the first five full texts>
 
         self.assertEqual(self.df.find_full_text(), text)
 
@@ -65,33 +71,69 @@ class TestTweetDfExtractor(unittest.TestCase):
         self.assertEqual(
             self.df.find_sentiments(self.df.find_full_text()),
             (
-                <provide a list of the first five sentiment values>,
-                <provide a list of the first five polarity values>,
+                [-0.125, -0.1, 0.0, 0.1, -6.938893903907228e-18], #<provide a list of the first five polarity values>,
+                [0.190625, 0.1, 0.0, 0.35, 0.55625] #<provide a list of the first five subjectivity values>,
             ),
         )
 
 
     def test_find_screen_name(self):
-        name = <provide a list of the first five screen names>
+        name = ['i_ameztoy', 'ZIisq', 'Fin21Free', 'Fin21Free', 'VizziniDolores'] #<provide a list of the first five screen names>
         self.assertEqual(self.df.find_screen_name(), name)
 
     def test_find_followers_count(self):
-        f_count = <provide a list of the first five follower counts>
+        f_count = [20497, 65, 85, 85, 910] #<provide a list of the first five follower counts>
         self.assertEqual(self.df.find_followers_count(), f_count)
 
     def test_find_friends_count(self):
-        friends_count = <provide a list of the first five friend's counts>
+        friends_count = [2621, 272, 392, 392, 2608] #<provide a list of the first five friends counts>
         self.assertEqual(self.df.find_friends_count(), friends_count)
 
-    def test_find_is_sensitive(self):
-        self.assertEqual(self.df.is_sensitive(), <provide a list of the first five is_sensitive values>)
+    def test_is_sensitive(self):
+        self.assertEqual(self.df.is_sensitive(), [None, None, None, None, None]) #<provide a list of the first five is_sensitive values>)
 
+    def test_find_lang(self):
+        self.assertEqual(self.df.find_lang(), ['en', 'en', 'en', 'en', 'en'])
+        
+    def test_find_favourite_count(self):
+        self.assertEqual(self.df.find_favourite_count(), [15760, 6967, 2166, 2166, 17247])    
 
-    # def test_find_hashtags(self):
-    #     self.assertEqual(self.df.find_hashtags(), )
+    def test_find_retweet_count(self):
+        self.assertEqual(self.df.find_retweet_count(), [2, 201, 0, 0, 381])
+        
+    def test_find_hashtags(self):
+        self.assertEqual(self.df.find_hashtags(), [[{'text': 'City', 'indices': [132, 137]}],
+ [{'text': 'China', 'indices': [18, 24]},
+  {'text': 'Taiwan', 'indices': [98, 105]}],
+ [{'text': 'XiJinping', 'indices': [127, 137]}],
+ [{'text': 'XiJinping', 'indices': [9, 19]}],
+ []])
 
-    # def test_find_mentions(self):
-    #     self.assertEqual(self.df.find_mentions(), )
+    def test_find_mentions(self):
+        self.assertEqual(self.df.find_mentions(), [[{'screen_name': 'i_ameztoy',
+   'name': 'Iban Ameztoy',
+   'id': 3418339671,
+   'id_str': '3418339671',
+   'indices': [3, 13]}],
+ [{'screen_name': 'IndoPac_Info',
+   'name': 'Indo-Pacific News - Watching the CCP-China Threat',
+   'id': 844136511079559168,
+   'id_str': '844136511079559168',
+   'indices': [3, 16]}],
+ [{'screen_name': 'ZelenskyyUa',
+   'name': 'Володимир Зеленський',
+   'id': 1120633726478823425,
+   'id_str': '1120633726478823425',
+   'indices': [90, 102]}],
+ [],
+ [{'screen_name': 'ChinaUncensored',
+   'name': 'China Uncensored',
+   'id': 833100331,
+   'id_str': '833100331',
+   'indices': [3, 19]}]])
+            
+    def test_find_location(self):
+        self.assertEqual(self.df.find_location(), ['', '', 'Netherlands', 'Netherlands', 'Ayent, Schweiz']) 
 
 
 
