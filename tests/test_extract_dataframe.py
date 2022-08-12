@@ -11,7 +11,7 @@ from extract_dataframe import TweetDfExtractor
 # we will need about 5 tweet samples. 
 # Create a sample not more than 10 tweets and place it in a json file.
 # Provide the path to the samples tweets file you created below
-sampletweetsjsonfile = "../sampletweets.json"   #put here the path to where you placed the file e.g. ./sampletweets.json. 
+sampletweetsjsonfile = os.path.dirname(__file__) + "/../sampletweets.json"   #put here the path to where you placed the file e.g. ./sampletweets.json. 
 _, tweet_list = read_json(sampletweetsjsonfile)
 
 tweet_list = tweet_list[0]
@@ -93,13 +93,13 @@ class TestTweetDfExtractor(unittest.TestCase):
         self.assertEqual(self.df.is_sensitive(), [None, None, None, None, None]) #<provide a list of the first five is_sensitive values>)
 
     def test_find_lang(self):
-        self.assertEqual(self.df.is_sensitive(), ['en', 'en', 'en', 'en', 'en'])
+        self.assertEqual(self.df.find_lang(), ['en', 'en', 'en', 'en', 'en'])
         
     def test_find_favourite_count(self):
-        self.assertEqual(self.df.is_sensitive(), [15760, 6967, 2166, 2166, 17247])    
+        self.assertEqual(self.df.find_favourite_count(), [15760, 6967, 2166, 2166, 17247])    
 
     def test_find_retweet_count(self):
-        self.assertEqual(self.df.is_sensitive(), [2, 201, 0, 0, 381])
+        self.assertEqual(self.df.find_retweet_count(), [2, 201, 0, 0, 381])
         
     def test_find_hashtags(self):
         self.assertEqual(self.df.find_hashtags(), [[{'text': 'City', 'indices': [132, 137]}],
@@ -133,7 +133,7 @@ class TestTweetDfExtractor(unittest.TestCase):
    'indices': [3, 19]}]])
             
     def test_find_location(self):
-        self.assertEqual(self.df.is_sensitive(), ['', '', 'Netherlands', 'Netherlands', 'Ayent, Schweiz']) 
+        self.assertEqual(self.df.find_location(), ['', '', 'Netherlands', 'Netherlands', 'Ayent, Schweiz']) 
 
 
 
