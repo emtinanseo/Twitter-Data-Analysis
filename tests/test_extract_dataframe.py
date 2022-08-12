@@ -93,7 +93,7 @@ class TestTweetDfExtractor(unittest.TestCase):
         self.assertEqual(self.df.is_sensitive(), [None, None, None, None, None]) #<provide a list of the first five is_sensitive values>)
 
     def test_find_lang(self):
-        self.assertEqual(self.df.is_sensitive(), ['en', 'en', 'en', 'en', 'en'])
+        self.assertEqual(self.df.is_sensitive(), ['en', 'en', 'en', 'en', 'ar'])
         
     def test_find_favourite_count(self):
         self.assertEqual(self.df.is_sensitive(), [15760, 6967, 2166, 2166, 17247])    
