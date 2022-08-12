@@ -5,7 +5,7 @@ class Clean_Tweets:
     The PEP8 Standard AMAZING!!!
     """
     def __init__(self, df:pd.DataFrame):
-        self.df = df
+        self.df = df.copy()
         print('Automation in Action...!!!')
         
     def drop_unwanted_column(self, df:pd.DataFrame)->pd.DataFrame:
@@ -16,8 +16,8 @@ class Clean_Tweets:
         unwanted_rows = df[df['retweet_count'] == 'retweet_count' ].index
         df.drop(unwanted_rows , inplace=True)
         df = df[df['polarity'] != 'polarity']
-        
         return df
+    
     def drop_duplicate(self, df:pd.DataFrame)->pd.DataFrame:
         """
         drop duplicate rows
@@ -31,7 +31,7 @@ class Clean_Tweets:
         """
         col_datetime = pd.to_datetime(df['created_at'])
         
-        df['created_at'] = col_datetime
+        df.loc[:, 'created_at'] = col_datetime
         
         df = df[df['created_at'] >= '2020-12-31' ]
         
